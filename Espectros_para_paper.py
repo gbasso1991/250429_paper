@@ -155,8 +155,8 @@ ax0 = fig.add_subplot(gs[:2, 0])
 ax1 = fig.add_subplot(gs[0, 1:3], sharex=ax2)
 ax2 = fig.add_subplot(gs[1, 1:3])  # Segunda fila, segunda 
 
-ax0.plot(H_1,M_1,'C0',lw=1.5,label='-20 ºC')
-ax0.plot(H_2,M_2,'C3',lw=1.5,label='20 ºC')
+#ax0.plot(H_1,M_1,'C0',lw=1.5,label='-20 ºC')
+ax0.plot(H_2,M_2,'C3',lw=2,label='20 ºC')
 
 ax0.legend(ncol=2)
 ax0.set_xlabel('H (kA/m)')
@@ -168,8 +168,8 @@ indices = np.arange(n)  # Índices para las barras
 ancho_sep = 0.1
 f0 = frecuencia_1[0]/1000
 
-ax1.stem(indices - ancho_sep/2, amplitud_1/max(amplitud_1), label='-20ºC',basefmt=' ' )
-ax1.stem(indices + ancho_sep/2, amplitud_2/max(amplitud_2), label='20ºC',linefmt='C3-', markerfmt='D', basefmt=' ' )
+#ax1.stem(indices - ancho_sep/2, amplitud_1/max(amplitud_1), label='-20ºC',basefmt=' ' )
+ax1.stem(indices, amplitud_2/max(amplitud_2), label='20ºC',linefmt='C3-', markerfmt='rD', basefmt=' ' )
 #ax1.text(1/2,1/2,f'$f_0 =$ {f0:.0f} kHz\n$H_0 = 38.4$ kA/m',transform=ax1.transAxes,fontsize=14,ha='center',bbox=dict(alpha=0.8))
 ax1.legend(ncol=2)
 # ax1.set_xlabel('Frecuencia')
@@ -182,8 +182,8 @@ ax1.set_ylim(0,1.1)
 ax1.grid()
 ax1.set_xlim(-0.4,4.5)
 
-ax2.stem(indices - ancho_sep/2, fase_1, label='-20ºC',basefmt=' ' )
-ax2.stem(indices + ancho_sep/2, fase_2, label='20 ºC',linefmt='C3-', markerfmt='D', basefmt=' ' )
+#ax2.stem(indices - ancho_sep/2, fase_1, label='-20ºC',basefmt=' ' )
+ax2.stem(indices, fase_2, label='20 ºC',linefmt='C3-', markerfmt='rD', basefmt=' ' )
 #ax2.text(3/4,1/2,f'{f0:.0f} kHz',transform=ax2.transAxes,fontsize=14,bbox=dict(alpha=0.8))
 ax2.legend(ncol=2)
 ax2.set_xlabel('Frecuencia (Hz)')
@@ -198,7 +198,7 @@ ax2.set_xlabel('Frequency')
 ax2.set_ylabel('Phase (rad)')
 ax2.set_xlim(-0.4,4.5)
 ax2.set_ylim(0,15)
-#lt.savefig('figura_paper.png',facecolor='w',dpi=500)
+plt.savefig('ciclo_20C_paper.png',facecolor='w',dpi=500)
 # Mostrar la figura
 plt.show()
 #%%

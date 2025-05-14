@@ -330,13 +330,13 @@ ax.plot(temperatura1, tau1_1,'.-',label=f'f1')
 
 ax2.set_title('medida 2',loc='left')
 ax2.plot(temperatura2, tau2_1,'.-',label=f'f1')
-# ax2.plot(temperatura2, tau2_3,'.-',label=f'f3')
-# ax2.plot(temperatura2, tau2_5,'.-',label=f'f5')
+ax2.plot(temperatura2, tau2_3,'.-',label=f'f3')
+ax2.plot(temperatura2, tau2_5,'.-',label=f'f5')
 
 ax3.set_title('medida 3',loc='left')
 ax3.plot(temperatura3[:-1], tau3_1,'.-',label=f'f1')
-# ax3.plot(temperatura3[:-1], tau3_3,'.-',label=f'f3')
-# ax3.plot(temperatura3[:-1], tau3_5,'.-',label=f'f5')
+ax3.plot(temperatura3[:-1], tau3_3,'.-',label=f'f3')
+ax3.plot(temperatura3[:-1], tau3_5,'.-',label=f'f5')
 
 for a in [ax,ax2,ax3]:
     a.legend(ncol=3)
@@ -481,19 +481,22 @@ for i in range(len(temperaturas_intervalo)):
 # PLOT TAU SAR
 
 fig, (ax,ax2) = plt.subplots(nrows=2,figsize=(10, 6),sharex=True, constrained_layout=True)
+ax.set_title(r'$\tau$')
 ax.set_ylabel(r'$\tau$ (s)')
 ax.errorbar(x=temperaturas_intervalo,y=promedios_tau,xerr=err_temperatura,yerr=errores_tau,capsize=4,fmt='.-')
 ax2.set_xlabel('Temperature (°C)')
 
+ax2.set_title('SAR')
 ax2.set_ylabel('SAR (W/g)')
 ax2.errorbar(x=temperaturas_intervalo,y=promedios_SAR,xerr=err_temperatura,yerr=errores_SAR,capsize=4,fmt='.-')
 plt.xlim(-21,21)
 for a in [ax,ax2]:
     a.grid()
-# plt.title(f'135 kHz - 38 kA/m - {Concentracion_NE_dd*1e3:.2f} g/L')
-#plt.savefig('tau_135_38_ddiluido.png',dpi=400)
+plt.suptitle(f'135 kHz - 38 kA/m - {Concentracion_NE_dd*1e3:.2f} g/L - 1er armonico')
+plt.savefig('tau_SAR_135_38_ddiluido_2024.png',dpi=400)
 plt.show()
 #%% PLOT TAU COLORES
+import matplotlib as mpl
 cmap = mpl.cm.get_cmap('jet')
 normalized_temperaturas = (temperaturas_intervalo - temperaturas_intervalo.min()) / (temperaturas_intervalo.max() - temperaturas_intervalo.min())
 colors = cmap(normalized_temperaturas)
@@ -522,15 +525,14 @@ plt.xlim(-21, 21)
 # plt.title(f'135 kHz - 38 kA/m - {Concentracion_NE_dd*1e3:.2f} g/L')
 plt.savefig('tau_135_38_7.4gL.png', dpi=400)
 
-temperaturas_intervalo=temperaturas_intervalo[:-1]
-err_temperatura=err_temperatura[:-1]
-promedios_tau=promedios_tau[:-1]
-errores_tau=errores_tau[:-1]
-combined_array = np.vstack((temperaturas_intervalo, err_temperatura,promedios_tau,errores_tau)).T
+# temperaturas_intervalo=temperaturas_intervalo[:-1]
+# err_temperatura=err_temperatura[:-1]
+# promedios_tau=promedios_tau[:-1]
+# errores_tau=errores_tau[:-1]
+# combined_array = np.vstack((temperaturas_intervalo, err_temperatura,promedios_tau,errores_tau)).T
 #np.savetxt('tau_vs_T_NE@citrato_7,4gL.txt', combined_array,header='| T | err T | tau | err tau |' ,fmt=['%f','%f','%e','%e'])
 
-
-#%% 2025 Abril agrego taus/areas obtenidos de los ajustes de Pedro
+#%% 2025 29 Abril agrego taus/areas obtenidos de los ajustes de Pedro
 concentracion=7.4*1e3
 data1 = np.genfromtxt('reporte_tau_area_a.txt', delimiter=',', skip_header=1)
 temp_1 = data1[:-1, 0]
@@ -608,12 +610,13 @@ for temp in temperaturas_intervalo_pedro:
 promedios_tau_pedro = np.array(promedios_tau_pedro)
 err_temperatura_pedro=np.full(len(temperaturas_intervalo_pedro),intervalo_temperatura/2)
 
+
 #%
 print("Intervalo de Temperatura   |  Tau promedio |  SAR promedio  ")
 print("-------------------------------------------------")
 for i in range(len(temperaturas_intervalo_pedro)):
     print(f"{temperaturas_intervalo_pedro[i]:.2f} - {temperaturas_intervalo_pedro[i] + intervalo_temperatura:.2f} °C |   {promedios_tau_pedro[i]:.2e}  |   {promedios_sar_pedro[i]:.2f} W/g")
-
+#%%
 
 fig, (ax,ax2) = plt.subplots(nrows=2,figsize=(10, 6),sharex=True, constrained_layout=True)
 ax.set_ylabel(r'$\tau$ (s)')
@@ -625,14 +628,10 @@ ax2.errorbar(x=temperaturas_intervalo_pedro,y=promedios_sar_pedro,xerr=err_tempe
 plt.xlim(-21,21)
 for a in [ax,ax2]:
     a.grid()
-# plt.title(f'135 kHz - 38 kA/m - {Concentracion_NE_dd*1e3:.2f} g/L')
+plt.suptitle(f'135 kHz - 38 kA/m - {Concentracion_NE_dd*1e3:.2f} g/L - Fitting Pedro')
 #plt.savefig('tau_135_38_ddiluido.png',dpi=400)
 plt.show()
 
-
-#%
-# promedios_tau=np.array(promedios_tau)*1e9
-# errores_tau=np.array(errores_tau)*1e9
 #%% 2025 Abr agrego taus de pedro 3r metodo
 # data1 = np.genfromtxt('reporte_tau_a.txt', delimiter=',', skip_header=1)
 # temp_1 = data1[:, 0]
@@ -716,10 +715,11 @@ plt.show()
 
 #%% Plots Tau de armonico  vs Tau de fitting 
 
-label_1='$\\tan (\phi_1) /\omega$'
+label_1='1st harmonic'
 label_2='$M(t)$ fitting'
 # label_3='$M(t)$ nuevo metodo'
 
+#Tau
 fig, ax = plt.subplots(figsize=(7, 3.5), constrained_layout=True)
 ax.errorbar(x=temperaturas_intervalo,y=promedios_tau,xerr=err_temperatura,yerr=np.array(errores_tau),capsize=4,
 fmt='.-',color='C1',label=label_1)
@@ -727,20 +727,16 @@ fmt='.-',color='C1',label=label_1)
 ax.errorbar(x=temperaturas_intervalo_pedro,y=promedios_tau_pedro,xerr=err_temperatura_pedro,yerr=errores_tau_pedro,
 capsize=4,fmt='.-',color='C2',label=label_2)
 
-
-# ax.errorbar(x=temperaturas_intervalo_pedro_2,y=promedios_tau_pedro_2,xerr=err_temperatura_pedro_2,yerr=errores_tau_pedro_2,
-# capsize=4,fmt='.-',color='C3',label=label_3)
-
 plt.legend(ncol=1,fontsize=13)
 plt.grid()
 plt.xlabel('Temperature (°C)')
 plt.ylabel(r'$\tau$ (ns)')
 plt.xlim(-21,21)
-# plt.title(f'135 kHz - 38 kA/m - {Concentracion_NE_dd*1e3:.2f} g/L')
+plt.title(f'tau - 135 kHz - 38 kA/m - {Concentracion_NE_dd*1e3:.2f} g/L')
 plt.savefig('tau_135_38_ddiluid_vs_tau_Pedro.png',facecolor='w',dpi=400)
 plt.show()
 
-
+#SAR
 fig2, ax = plt.subplots(figsize=(7, 3.5), constrained_layout=True)
 ax.errorbar(x=temperaturas_intervalo,y=promedios_SAR,xerr=err_temperatura,yerr=errores_SAR,capsize=4,
 fmt='.-',color='C1',label=label_1)
@@ -753,26 +749,47 @@ plt.grid()
 plt.xlabel('Temperature (°C)')
 plt.ylabel('SAR (W/g)')
 plt.xlim(-21,21)
-# plt.title(f'135 kHz - 38 kA/m - {Concentracion_NE_dd*1e3:.2f} g/L')
+plt.title(f'SAR - 135 kHz - 38 kA/m - {Concentracion_NE_dd*1e3:.2f} g/L')
 plt.savefig('sar_135_38_ddiluid_vs_tau_Pedro.png',facecolor='w',dpi=400)
 plt.show()
 
+#%% 30 Abr 25 graficos para Nacho: Tau | SAR 
 
 
 
-# %% 29 Abr 25 Agrego Areas de ciclos del fitting para co,parar con SAR de 1er armonico
+fig, (ax1,ax2) = plt.subplots(ncols=2,figsize=(12, 3.5), constrained_layout=True)
+ax1.errorbar(x=temperaturas_intervalo,y=promedios_tau,xerr=err_temperatura,yerr=np.array(errores_tau),capsize=4,
+fmt='.-',color='C1',label=label_1)
 
-data_area_1 = np.genfromtxt('reporte_tau_area_a.txt', delimiter=',', skip_header=1)
-T_1,area_1=data_area_1[:-1,0],data_area_1[:-1,-1]
-#sar_pedro_1=
+ax1.errorbar(x=temperaturas_intervalo_pedro,y=promedios_tau_pedro,xerr=err_temperatura_pedro,yerr=errores_tau_pedro,
+capsize=4,fmt='.-',color='C2',label=label_2)
 
-data_area_2 = np.genfromtxt('reporte_tau_area_b.txt', delimiter=',', skip_header=1)
-T_2,area_2=data_area_2[:-1,0],data_area_2[:-1,-1]
+#SAR
+ax2.errorbar(x=temperaturas_intervalo,y=promedios_SAR,xerr=err_temperatura,yerr=errores_SAR,capsize=4,
+fmt='.-',color='C1',label=label_1)
 
-data_area_3 = np.genfromtxt('reporte_tau_area_c.txt', delimiter=',', skip_header=1)
-T_3,area_3=data_area_3[:-1,0],data_area_3[:-1,-1]
-# %%
-plt.plot(T_1,area_1,'.-')
-plt.plot(T_2,area_2,'.-')
-plt.plot(T_3,area_3,'.-')
-# %%
+ax2.errorbar(x=temperaturas_intervalo_pedro,y=promedios_sar_pedro,xerr=err_temperatura_pedro,yerr=errores_sar_pedro,
+capsize=4,fmt='.-',color='C2',label=label_2)
+
+for a in (ax1,ax2):
+    a.grid()
+    a.legend(fontsize=12)
+    a.set_xlabel('Temperature (°C)')
+    a.set_xlim(-21,21)
+
+ax1.set_ylabel(r'$\tau$ (ns)')
+ax2.set_ylabel('SAR (W/g)')
+ax1.set_title(r'Relaxation time $\tau$')
+ax2.set_title('Specific absorption rate SAR')
+
+
+# plt.title(f'tau - 135 kHz - 38 kA/m - {Concentracion_NE_dd*1e3:.2f} g/L')
+# plt.savefig('tau_135_38_ddiluid_vs_tau_Pedro.png',facecolor='w',dpi=400)
+# plt.show()
+# plt.legend(ncol=1,fontsize=13)
+# plt.grid()
+# plt.xlabel('Temperature (°C)')
+# plt.xlim(-21,21)
+# plt.title(f'SAR - 135 kHz - 38 kA/m - {Concentracion_NE_dd*1e3:.2f} g/L')
+plt.savefig('tau_sar_135_38_1erarmonico_vs_fit.png',facecolor='w',dpi=400)
+plt.show()
