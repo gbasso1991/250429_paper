@@ -15,11 +15,7 @@ La ecuación a satisfacer es:
 d M(H,t) / dt = (1/tau) ( Meq(H) - M(H,t) )
 
 M. Shliomis, Sov. Phys. Uspekhi (Engl. transl.) 17 (2) (1974) 153.
-
-
 """
-
-
 import numpy as np
 import matplotlib.pyplot as plt
 from   scipy.integrate import odeint
@@ -306,19 +302,28 @@ plt.errorbar(freq[indices], y_aux1, yerr=[yerr_lower, yerr_upper], fmt='o', caps
 plt.plot(0,0)
 plt.xlabel('freq (Hz)')
 plt.legend()
+plt.grid()
+plt.savefig('ajuste_fase_frec.png',dpi=300,facecolor='w')
 plt.show()
 
 
+#%% 14 de Mayo 
+fig, ax = plt.subplots(constrained_layout=True)
 
-#%%
-fig,ax=plt.subplots(constrained_layout=True)
-ax.plot(freq[indices], np.tan(fase_modelo) , 'og',label=r"$\tan(n \varphi_C - \varphi_{M_n})$")
-ax.plot(np.insert(freq[indices],0,0), (np.insert(freq[indices],0,0))*pend ,'r-',label='Pesado por Amp')
-ax.errorbar(freq[indices], y_aux1, yerr=[yerr_lower, yerr_upper], fmt='.', capsize=5, label='Datos')
+# Guardar los objetos de las gráficas para usarlos en la leyenda
+datos = ax.errorbar(freq[indices], y_aux1, yerr=[yerr_lower, yerr_upper], fmt='.', capsize=5, label='Experimental Data')
+tan_line = ax.plot(freq[indices], np.tan(fase_modelo), 'og', label=r"$\tan\left(n \varphi_C - \varphi_{M_n}\right)$")
+ajuste = ax.plot(np.insert(freq[indices],0,0), (np.insert(freq[indices],0,0))*pend, 'r-', label='Amplitude-weighted fit')
+
 ax.grid()
-ax.legend()
+
+# Especificar el orden de las etiquetas manualmente
+handles = [datos, ajuste[0],tan_line[0]]  # [0] porque plot devuelve una lista
+labels = [h.get_label() for h in handles]
+ax.legend(handles, labels,ncol=2)
+
 ax.set_xlabel('Frecuency (Hz)')
-plt.savefig('grafico_G.png',dpi=300)
+plt.savefig('ajuste_fase_frec.png', dpi=300,facecolor='w')
 #%%
 """
 Fase del modelo
