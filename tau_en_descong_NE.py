@@ -713,9 +713,9 @@ plt.show()
 # promedios_tau_pedro_2=np.array(promedios_tau_pedro_2)*1e9
 # errores_tau_pedro_2=np.array(errores_tau_pedro_2)*1e9
 
-#%% Plots Tau de armonico  vs Tau de fitting 
+#%% 21 Mayo 25 Plots Tau de armonico  vs Tau de fitting 
+label_1='$\\tan (\phi_1) /\omega$'
 
-label_1='1st harmonic'
 label_2='$M(t)$ fitting'
 # label_3='$M(t)$ nuevo metodo'
 
@@ -732,11 +732,11 @@ plt.grid()
 plt.xlabel('Temperature (°C)')
 plt.ylabel(r'$\tau$ (ns)')
 plt.xlim(-21,21)
-plt.title(f'tau - 135 kHz - 38 kA/m - {Concentracion_NE_dd*1e3:.2f} g/L')
-plt.savefig('tau_135_38_ddiluid_vs_tau_Pedro.png',facecolor='w',dpi=400)
+#plt.title(f'tau - 135 kHz - 38 kA/m - {Concentracion_NE_dd*1e3:.2f} g/L')
+plt.savefig('tau_vs_T_paper.png',facecolor='w',dpi=400)
 plt.show()
 
-#SAR
+#%%SAR
 fig2, ax = plt.subplots(figsize=(7, 3.5), constrained_layout=True)
 ax.errorbar(x=temperaturas_intervalo,y=promedios_SAR,xerr=err_temperatura,yerr=errores_SAR,capsize=4,
 fmt='.-',color='C1',label=label_1)
@@ -757,7 +757,7 @@ plt.show()
 
 
 
-fig, (ax1,ax2) = plt.subplots(ncols=2,figsize=(12, 3.5), constrained_layout=True)
+fig, (ax1,ax2) = plt.subplots(nrows=2,figsize=(8, 6), sharex=True,constrained_layout=True)
 ax1.errorbar(x=temperaturas_intervalo,y=promedios_tau,xerr=err_temperatura,yerr=np.array(errores_tau),capsize=4,
 fmt='.-',color='C1',label=label_1)
 
@@ -774,13 +774,14 @@ capsize=4,fmt='.-',color='C2',label=label_2)
 for a in (ax1,ax2):
     a.grid()
     a.legend(fontsize=12)
-    a.set_xlabel('Temperature (°C)')
     a.set_xlim(-21,21)
 
+ax2.set_xlabel('Temperature (°C)')
 ax1.set_ylabel(r'$\tau$ (ns)')
 ax2.set_ylabel('SAR (W/g)')
-ax1.set_title(r'Relaxation time $\tau$')
-ax2.set_title('Specific absorption rate SAR')
+# ax1.set_title(r'Relaxation time $\tau$')
+
+# ax2.set_title('Specific absorption rate SAR')
 
 
 # plt.title(f'tau - 135 kHz - 38 kA/m - {Concentracion_NE_dd*1e3:.2f} g/L')
@@ -793,3 +794,5 @@ ax2.set_title('Specific absorption rate SAR')
 # plt.title(f'SAR - 135 kHz - 38 kA/m - {Concentracion_NE_dd*1e3:.2f} g/L')
 plt.savefig('tau_sar_135_38_1erarmonico_vs_fit.png',facecolor='w',dpi=400)
 plt.show()
+
+# %%
